@@ -144,7 +144,7 @@ while True:
         var_b = 0
         # loop over the indexes we are keeping
         for i in idxs.flatten():
-            print("...")
+#             print("...")
             var_b = 0
             # extract the bounding box coordinates
             (x, y) = (boxes[i][0], boxes[i][1])
