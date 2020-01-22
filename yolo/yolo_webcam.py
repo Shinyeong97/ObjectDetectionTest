@@ -10,7 +10,7 @@ import os
 ap = argparse.ArgumentParser()
 
 ap.add_argument("-y", "--yolo", required=True, help="base path to YOLO directory")
-
+ap.add_argument("-d", "--device", type=int, default=0, help="device number using for the detection(usually 0 for front cam and 1 for rear cam")
 ap.add_argument("-c", "--confidence", type=float, default=0.5, help="minimum probability to filter weak detections")
 ap.add_argument("-t", "--threshold", type=float, default=0.3, help="threshold when applyong non-maxima suppression")
 args = vars(ap.parse_args())
@@ -41,11 +41,12 @@ ln = [ln[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
 # initialize the video stream, pointer to output video file, and
 # frame dimensions
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(args["device"])
 writer = None
 (W, H) = (None, None)
 
 
+print("[INFO] press 'q' button to close the window...")
 # loop over frames from the video file stream
 while True:
     # read the next frame from the file
@@ -57,8 +58,9 @@ while True:
         print("the frame was not grabbed")
         break
         
-    # when you use a front cam    
-    #frame = cv2.flip(frame, 1)
+    # when you use a front cam, flip it horizontally
+    if args["device"] == 0:
+        frame = cv2.flip(frame, 1)
  
     # if the frame dimensions are empty, grab them
     if W is None or H is None:
