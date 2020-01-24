@@ -23,6 +23,8 @@ import os
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
                 help="path to input image")
+ap.add_argument("-o", "--output", required=True,
+                help="path to output image")
 ap.add_argument("-y", "--yolo", required=True,
                 help="base path to YOLO directory")
 ap.add_argument("-c", "--confidence", type=float, default=0.5,
@@ -78,7 +80,11 @@ layerOutputs = net.forward(ln)
 end = time.time()
  
 # show timing information on YOLO
-print("[INFO] YOLO took {:.6f} seconds".format(end - start))
+elapsed_time = end - start
+print("[INFO] YOLO took {:.6f} seconds".format(elapsed_time))
+time_text = "Elapsed time: {:.6f}".format(elapsed_time)
+cv2.putText(image, time_text, (0, 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 4)
+cv2.putText(image, time_text, (0, 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
 
 
 # In[ ]:
@@ -154,5 +160,5 @@ if len(idxs) > 0:
 			0.5, color, 2)
 # show the output image
 cv2.imshow("Image", image)
+cv2.imwrite(args["output"], image)
 cv2.waitKey(0)
-
